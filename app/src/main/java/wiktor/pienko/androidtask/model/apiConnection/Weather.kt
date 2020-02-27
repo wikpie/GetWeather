@@ -6,7 +6,6 @@ import android.widget.Toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.adapter.rxjava2.Result.response
 import wiktor.pienko.androidtask.model.room.WeatherInfo
 
 
@@ -26,12 +25,14 @@ class Weather {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                        { result ->Log.d("size", result.size.toString())
-                            weatherInfo=WeatherInfo(result[0].name,result[0].weather.main,result[0].main.temp,result[0].weather.icon) },
+                        { result ->Log.d("size", result.toString())
+                            weatherInfo=WeatherInfo(result.name,result.weather[0].main,result.main.temp,result.weather[0].icon) },
                         { error -> Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
                         Log.d("size", error.message)}
                     )
-
         return weatherInfo
         }
+    fun clearDisposable(){
+        disposable?.dispose()
+    }
 }

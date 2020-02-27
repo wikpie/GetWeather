@@ -16,11 +16,10 @@ interface WeatherInterface {
     fun getWeather(@Query("q") city: String,
                       @Query("units") units: String,
                       @Query("appid") appid: String =API):
-            Observable<List<WeatherDataModel.Result>>
+            Observable<WeatherDataModel.Result>
 
     companion object {
         fun create(): WeatherInterface {
-
             val retrofit = Retrofit.Builder()
                 .addCallAdapterFactory(
                     RxJava2CallAdapterFactory.create())

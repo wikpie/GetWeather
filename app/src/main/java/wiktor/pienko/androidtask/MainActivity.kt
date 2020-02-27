@@ -21,6 +21,7 @@ import wiktor.pienko.androidtask.view.WeatherInfoAdapter
 class MainActivity : AppCompatActivity() {
 
     private val activityRequestCode = 1
+    private val weather=Weather()
     private lateinit var weatherViewModel:WeatherViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             data?.getStringExtra(AddCityActivity.EXTRA_REPLY)?.let {
                 val city = it
                 weatherViewModel.insert(addCity(city))
+                weather.clearDisposable()
                 Log.d("city",city)
             }
         } else {
@@ -59,7 +61,6 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun addCity(city: String): WeatherInfo {
-        val weather=Weather()
         return weather.addCity(city,this)
     }
 }
