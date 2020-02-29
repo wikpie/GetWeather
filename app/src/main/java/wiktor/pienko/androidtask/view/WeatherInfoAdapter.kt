@@ -19,12 +19,18 @@ class WeatherInfoAdapter internal constructor(
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var weatherInfoList = emptyList<WeatherInfo>()
+    var onItemTouch: ((WeatherInfo) -> Unit)? = null
 
     inner class WeatherInfoHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val cityNameView:TextView= itemView.findViewById(R.id.city_name)
         val temperatureTextView:TextView=itemView.findViewById(R.id.temperature_text)
         val descriptionTextView:TextView=itemView.findViewById(R.id.description_text)
         val iconImageView:ImageView=itemView.findViewById(R.id.weather_image)
+        init {
+            itemView.setOnClickListener {
+                onItemTouch?.invoke(weatherInfoList[adapterPosition])
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherInfoHolder {

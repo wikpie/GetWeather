@@ -1,7 +1,9 @@
 package wiktor.pienko.androidtask
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -21,7 +23,6 @@ import wiktor.pienko.androidtask.model.room.WeatherInfo
 import wiktor.pienko.androidtask.presenter.WeatherViewModel
 import wiktor.pienko.androidtask.presenter.WeatherViewModelFactory
 import wiktor.pienko.androidtask.view.WeatherInfoAdapter
-import java.security.AccessController.getContext
 
 
 class MainActivity : AppCompatActivity() {
@@ -50,6 +51,18 @@ class MainActivity : AppCompatActivity() {
                 DividerItemDecoration.VERTICAL
             )
         )
+        adapter.onItemTouch={ weatherInfo ->
+            AlertDialog.Builder(this)
+                .setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this entry?")
+                .setPositiveButton(android.R.string.yes
+                ) { _, _ ->
+                    weatherViewModel.delete(weatherInfo)
+                }
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show()
+        }
         floatingActionButton.setOnClickListener {
             val intent = Intent(this@MainActivity, AddCityActivity::class.java)
             startActivityForResult(intent, activityRequestCode )
@@ -61,7 +74,6 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == activityRequestCode && resultCode == Activity.RESULT_OK) {
             data?.getStringExtra(AddCityActivity.EXTRA_REPLY)?.let {
                 val city = it
@@ -74,7 +86,6 @@ class MainActivity : AppCompatActivity() {
                 R.string.error_adding,
                 Toast.LENGTH_LONG).show()
         }
-
     }
 
     private fun addCity(city: String, context: Context){

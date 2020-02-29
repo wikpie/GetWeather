@@ -34,4 +34,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     fun insert(weatherInfo: WeatherInfo) = viewModelScope.launch {
         repository.insert(weatherInfo)
     }
+    fun delete(weatherInfo: WeatherInfo) = viewModelScope.launch {
+        repository.delete(weatherInfo)
+    }
 }
