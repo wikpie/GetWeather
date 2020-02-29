@@ -15,23 +15,22 @@ class Weather {
         WeatherInterface.create()
     }
     var disposable: Disposable? = null
-
+    var weatherInfo=WeatherInfo("","",0.0,"")
 
     fun addCity(city: String, context:Context) :WeatherInfo{
-        var weatherInfo=WeatherInfo("","",0.0,"")
-        var list:List<WeatherDataModel>
-            disposable =
-                weatherInterface.getWeather(city, "metric", API)
+                disposable=weatherInterface.getWeather(city, "metric", API)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                        { result ->Log.d("size", result.toString())
-                            weatherInfo=WeatherInfo(result.name,result.weather[0].main,result.main.temp,result.weather[0].icon) },
+                        { result ->Log.d("city_full", result.toString())
+                            weatherInfo=WeatherInfo(result.name,result.weather[0].main,result.main.temp,result.weather[0].icon)
+                            Log.d("city_weather_first", weatherInfo.toString())
+                        },
                         { error -> Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
-                        Log.d("size", error.message)}
-                    )
+                        Log.d("city_error", error.message)})
         return weatherInfo
-        }
+    }
+
     fun clearDisposable(){
         disposable?.dispose()
     }

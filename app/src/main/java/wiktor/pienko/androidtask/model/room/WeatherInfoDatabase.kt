@@ -27,8 +27,8 @@ abstract class WeatherInfoDatabase : RoomDatabase() {
 
         suspend fun populateDatabase(weatherInfoDAO: WeatherInfoDAO) {
             // Add sample words.
-            var weatherInfo = WeatherInfo("Hello","jo",32.0, "ss")
-            weatherInfoDAO.insert(weatherInfo)
+            //var weatherInfo = WeatherInfo("Hello","jo",32.0, "ss")
+            //weatherInfoDAO.insert(weatherInfo)
         }
     }
 
@@ -47,7 +47,7 @@ abstract class WeatherInfoDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     WeatherInfoDatabase::class.java,
-                    "word_database"
+                    "weather_database"
                 )
                     .addCallback(WeatherDatabaseCallback(scope))
                     .build()

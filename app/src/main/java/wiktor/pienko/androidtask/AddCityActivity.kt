@@ -20,8 +20,6 @@ class AddCityActivity : AppCompatActivity() {
         val textLayout=findViewById<TextInputLayout>(R.id.add_city_layout)
         val button = findViewById<Button>(R.id.button_save)
         button.setOnClickListener {
-            //addCity(addCityTextView.text.toString())
-            Log.d("city_add", textLayout.editText?.text.toString())
             val replyIntent = Intent()
             if (textLayout.editText?.text.toString()=="") {
                 setResult(Activity.RESULT_CANCELED, replyIntent)

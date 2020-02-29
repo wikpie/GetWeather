@@ -1,14 +1,17 @@
 package wiktor.pienko.androidtask.view
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import wiktor.pienko.androidtask.R
 import wiktor.pienko.androidtask.model.room.WeatherInfo
+import kotlin.math.roundToInt
 
 class WeatherInfoAdapter internal constructor(
     context: Context
@@ -33,8 +36,9 @@ class WeatherInfoAdapter internal constructor(
         val current = weatherInfoList[position]
         holder.cityNameView.text = current.city
         holder.descriptionTextView.text=current.description
-        holder.temperatureTextView.text=current.temperature.toString()
-        // holder.iconImageView funkcja która ustawia ikonke
+        holder.temperatureTextView.text= (current.temperature?.roundToInt().toString())+"℃"
+        Log.d("icons", current.icon)
+        Glide.with(holder.iconImageView.context).load("http://openweathermap.org/img/w/"+current.icon+".png").into(holder.iconImageView)
     }
 
     internal fun setInfo(info: List<WeatherInfo>) {

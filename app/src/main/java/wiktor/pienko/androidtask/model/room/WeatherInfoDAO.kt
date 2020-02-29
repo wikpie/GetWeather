@@ -2,7 +2,6 @@ package wiktor.pienko.androidtask.model.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import wiktor.pienko.androidtask.model.room.WeatherInfo
 
 @Dao
 interface WeatherInfoDAO {
@@ -14,5 +13,11 @@ interface WeatherInfoDAO {
 
     @Delete
     suspend fun delete(weatherInfo: WeatherInfo)
+
+    @Query("DELETE FROM weatherInfo WHERE city=:city")
+    fun deleteByCityName(city:String)
+
+    @Query("DELETE FROM weatherinfo")
+    fun deleteAll()
 
 }

@@ -1,28 +1,39 @@
 package wiktor.pienko.androidtask
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import wiktor.pienko.androidtask.model.apiConnection.Weather
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import wiktor.pienko.androidtask.model.apiConnection.WeatherInterface
 import wiktor.pienko.androidtask.model.room.WeatherInfo
 import wiktor.pienko.androidtask.presenter.WeatherViewModel
 import wiktor.pienko.androidtask.presenter.WeatherViewModelFactory
 import wiktor.pienko.androidtask.view.WeatherInfoAdapter
+import java.security.AccessController.getContext
+
 
 class MainActivity : AppCompatActivity() {
 
     private val activityRequestCode = 1
-    private val weather=Weather()
     private lateinit var weatherViewModel:WeatherViewModel
+    private val API="41c29c7f2b18515e7134c5a03817df37"
+    private val weatherInterface by lazy {
+        WeatherInterface.create()
+    }
+    var disposable: Disposable? = null
+    var weatherInfo=WeatherInfo("","",0.0,"")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,6 +44,12 @@ class MainActivity : AppCompatActivity() {
         weatherViewModel= ViewModelProviders.of(this, viewModelFactory).get(WeatherViewModel::class.java)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
         floatingActionButton.setOnClickListener {
             val intent = Intent(this@MainActivity, AddCityActivity::class.java)
             startActivityForResult(intent, activityRequestCode )
@@ -48,8 +65,7 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == activityRequestCode && resultCode == Activity.RESULT_OK) {
             data?.getStringExtra(AddCityActivity.EXTRA_REPLY)?.let {
                 val city = it
-                weatherViewModel.insert(addCity(city))
-                weather.clearDisposable()
+                addCity(city, this)
                 Log.d("city",city)
             }
         } else {
@@ -60,7 +76,25 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-    private fun addCity(city: String): WeatherInfo {
-        return weather.addCity(city,this)
+
+    private fun addCity(city: String, context: Context){
+        disposable=weatherInterface.getWeather(city, "metric", API)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { result ->Log.d("city_full", result.toString())
+                    weatherInfo=WeatherInfo(result.name,result.weather[0].main,result.main.temp,result.weather[0].icon)
+                    Log.d("city_weather_first", weatherInfo.toString())
+                    weatherViewModel.insert(weatherInfo)
+                    disposable?.dispose()
+                },
+                { error -> Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+                    Log.d("city_error", error.message)})
     }
+
+   /* private fun addCity(city: String): WeatherInfo {
+        val weather=Weather()
+        Log.d("city_add_city", weather.addCity(city,this).toString() )
+        return weather.addCity(city,this)
+    }*/
 }
