@@ -10,14 +10,9 @@ import wiktor.pienko.androidtask.base.BASE_URL
 import wiktor.pienko.androidtask.model.apiConnection.WeatherInterface
 
 @Module
-// Safe here as we are dealing with a Dagger 2 module
 @Suppress("unused")
 object NetworkModule {
-    /**
-     * Provides the Post service implementation.
-     * @param retrofit the Retrofit object used to instantiate the service
-     * @return the Post service implementation.
-     */
+
     @Provides
     @Reusable
     @JvmStatic
@@ -25,10 +20,6 @@ object NetworkModule {
         return retrofit.create(WeatherInterface::class.java)
     }
 
-    /**
-     * Provides the Retrofit object.
-     * @return the Retrofit object
-     */
     @Provides
     @Reusable
     @JvmStatic

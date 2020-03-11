@@ -24,13 +24,10 @@ class AddCityActivity : BaseActivity<AddCityPresenter>(), AddCityView{
         val textLayout=findViewById<TextInputLayout>(R.id.add_city_layout)
         val button = findViewById<Button>(R.id.button_save)
         button.setOnClickListener {
-            val replyIntent = Intent()
             if (textLayout.editText?.text.toString()=="") {
-                setResult(Activity.RESULT_CANCELED, replyIntent)
+                presenter.onClickedButtonError()
             } else {
-                val city = textLayout.editText?.text.toString()
-                replyIntent.putExtra(EXTRA_REPLY, city)
-                setResult(Activity.RESULT_OK, replyIntent)
+                presenter.onClickedButtonOK(textLayout.editText?.text.toString())
             }
             finish()
         }

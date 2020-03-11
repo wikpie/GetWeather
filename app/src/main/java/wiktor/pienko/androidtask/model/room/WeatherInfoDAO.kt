@@ -17,7 +17,7 @@ interface WeatherInfoDAO {
     @Query("DELETE FROM weatherInfo WHERE city=:city")
     fun deleteByCityName(city:String)
 
-    @Query("DELETE FROM weatherinfo")
+    @Query("DELETE FROM weatherInfo")
     fun deleteAll()
 
 }

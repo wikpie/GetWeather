@@ -26,9 +26,8 @@ abstract class WeatherInfoDatabase : RoomDatabase() {
         }
 
         suspend fun populateDatabase(weatherInfoDAO: WeatherInfoDAO) {
-            // Add sample words.
-            //var weatherInfo = WeatherInfo("Hello","jo",32.0, "ss")
-            //weatherInfoDAO.insert(weatherInfo)
+            val weatherInfo = WeatherInfo("Gdańsk","light rain",8.0, "10n")
+            weatherInfoDAO.insert(weatherInfo)
         }
     }
 
