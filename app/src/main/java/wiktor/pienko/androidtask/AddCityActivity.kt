@@ -11,8 +11,12 @@ import android.widget.TextView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_add_city.*
+import wiktor.pienko.androidtask.base.BaseActivity
+import wiktor.pienko.androidtask.base.EXTRA_REPLY
+import wiktor.pienko.androidtask.presenter.AddCityPresenter
+import wiktor.pienko.androidtask.view.AddCityView
 
-class AddCityActivity : AppCompatActivity() {
+class AddCityActivity : BaseActivity<AddCityPresenter>(), AddCityView{
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +35,10 @@ class AddCityActivity : AppCompatActivity() {
             finish()
         }
         }
-    companion object {
-        const val EXTRA_REPLY = "city_name"
+
+    override fun instantiatePresenter(): AddCityPresenter {
+        return AddCityPresenter(this)
     }
-    }
+}
 
 

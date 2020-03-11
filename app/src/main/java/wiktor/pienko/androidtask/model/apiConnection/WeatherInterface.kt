@@ -6,19 +6,17 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import wiktor.pienko.androidtask.base.API
 
 interface WeatherInterface {
-    val API: String
-        get() = "41c29c7f2b18515e7134c5a03817df37"
 
-    //api.openweathermap.org/data/2.5/weather?q={city name}&units=metric&appid=$API
     @GET("weather")
     fun getWeather(@Query("q") city: String,
                       @Query("units") units: String,
-                      @Query("appid") appid: String =API):
+                      @Query("appid") appid: String = API):
             Observable<WeatherDataModel.Result>
 
-    companion object {
+    /*companion object {
         fun create(): WeatherInterface {
             val retrofit = Retrofit.Builder()
                 .addCallAdapterFactory(
@@ -30,5 +28,5 @@ interface WeatherInterface {
 
             return retrofit.create(WeatherInterface::class.java)
         }
-    }
+    }*/
 }
