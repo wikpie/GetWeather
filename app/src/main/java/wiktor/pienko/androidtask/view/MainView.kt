@@ -3,9 +3,9 @@ package wiktor.pienko.androidtask.view
 import android.app.AlertDialog
 import android.content.Intent
 import android.widget.Toast
-import wiktor.pienko.androidtask.AddCityActivity
+import wiktor.pienko.androidtask.activity.AddCityActivity
 import wiktor.pienko.androidtask.base.BaseView
-import wiktor.pienko.androidtask.base.activityRequestCode
+import wiktor.pienko.androidtask.base.ACTIVITY_REQUEST_CODE
 import wiktor.pienko.androidtask.model.room.WeatherInfo
 
 interface MainView : BaseView {
@@ -28,6 +28,6 @@ interface MainView : BaseView {
 
     fun startAddActivity() {
         val intent = Intent(getContext(), AddCityActivity::class.java)
-        getActivity().startActivityForResult(intent, activityRequestCode)
+        getActivity().startActivityForResult(intent, ACTIVITY_REQUEST_CODE)
     }
 }

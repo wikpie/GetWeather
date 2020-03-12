@@ -1,4 +1,4 @@
-package wiktor.pienko.androidtask
+package wiktor.pienko.androidtask.activity
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -9,9 +9,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import wiktor.pienko.androidtask.R
+import wiktor.pienko.androidtask.base.ACTIVITY_REQUEST_CODE
 import wiktor.pienko.androidtask.base.BaseActivity
 import wiktor.pienko.androidtask.base.EXTRA_REPLY
-import wiktor.pienko.androidtask.base.activityRequestCode
 import wiktor.pienko.androidtask.databinding.ActivityMainBinding
 import wiktor.pienko.androidtask.model.room.WeatherInfo
 import wiktor.pienko.androidtask.presenter.MainPresenter
@@ -25,7 +26,9 @@ class MainActivity :  BaseActivity<MainPresenter>(), MainView {
     private val weatherInfoAdapter=WeatherInfoAdapter()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this,
+            R.layout.activity_main
+        )
         binding.adapter=weatherInfoAdapter
         binding.layoutManager= LinearLayoutManager(this)
         binding.dividerItemDecoration= DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
@@ -41,7 +44,7 @@ class MainActivity :  BaseActivity<MainPresenter>(), MainView {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == activityRequestCode && resultCode == Activity.RESULT_OK) {
+        if (requestCode == ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             data?.getStringExtra(EXTRA_REPLY)?.let {
                 presenter.addCity(it)
             }
